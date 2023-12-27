@@ -31,7 +31,7 @@ impl BloomFilter {
         }
     }
 
-    pub fn insert(&mut self, value: &String) {
+    pub fn insert(&mut self, value: &str) {
         let h128 = self.hasher.hash(value.as_bytes()).as_u128();
         let h0 = (h128 & 0xffff_ffff_ffff_ffff) as u64;
         let h1 = (h128 >> 64) as u64;
@@ -43,14 +43,14 @@ impl BloomFilter {
         }
     }
 
-    pub fn not_exist(&self, value: &String) -> bool {
+    pub fn contains(&self, value: &str) -> bool {
         let h128 = self.hasher.hash(value.as_bytes()).as_u128();
         let h0 = (h128 & 0xffff_ffff_ffff_ffff) as u64;
         let h1 = (h128 >> 64) as u64;
         let mut hash = h0;
         for _ in 0..self.num_hash {
             let bit = (hash % self.size) as usize;
-            if self.values[bit] == true {
+            if self.values[bit] == false {
                 return false;
             }
             hash = hash.wrapping_add(h1);

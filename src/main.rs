@@ -12,9 +12,13 @@ fn main() {
 
 fn read_file(file_path: String) -> Vec<String> {
     let contents = fs::read_to_string(file_path).expect("Should have been able to read the file");
-    let punctuations: &[_] = &[',', '.', '!', ':', ';', '?'];
     return contents
         .split_whitespace()
-        .map(|x| x.trim_end_matches(punctuations).to_lowercase())
+        .map(|x| {
+            x.to_lowercase()
+                .chars()
+                .filter(|c| c.is_alphabetic())
+                .collect::<String>()
+        })
         .collect();
 }
